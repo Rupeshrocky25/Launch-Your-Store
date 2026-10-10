@@ -1,6 +1,6 @@
 import { createApp } from '../server';
 
-const appPromise = createApp({ mountFrontend: false, normalizeApiBase: true });
+const appPromise = createApp({ mountFrontend: false });
 
 export default async function handler(req: any, res: any) {
   const app = await appPromise;

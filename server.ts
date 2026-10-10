@@ -17,14 +17,28 @@ export async function createApp(options: { mountFrontend?: boolean; normalizeApi
   const { mountFrontend = true, normalizeApiBase = false } = options;
   const app = express();
 
-  if (normalizeApiBase) {
-    app.use((req, _res, next) => {
-      if (!req.url.startsWith('/api/')) {
+  // Bulletproof URL normalizer for Vercel serverless functions & local dev
+  app.use((req, _res, next) => {
+    try {
+      const rawUrl = req.url || '';
+      const [pathname, search] = rawUrl.split('?');
+      const searchParams = new URLSearchParams(search || '');
+      const route = searchParams.get('__route');
+
+      if (route) {
+        searchParams.delete('__route');
+        const cleanRoute = route.startsWith('/') ? route.slice(1) : route;
+        const pathPart = cleanRoute.startsWith('api/') ? cleanRoute : `api/${cleanRoute}`;
+        const remainingSearch = searchParams.toString();
+        req.url = `/${pathPart}${remainingSearch ? `?${remainingSearch}` : ''}`;
+      } else if (!req.url.startsWith('/api')) {
         req.url = `/api${req.url.startsWith('/') ? req.url : `/${req.url}`}`;
       }
-      next();
-    });
-  }
+    } catch (e) {
+      // Keep original req.url on fallback
+    }
+    next();
+  });
 
   app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ extended: true, limit: '10mb' }));
