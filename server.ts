@@ -13,9 +13,18 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-async function startServer() {
+export async function createApp(options: { mountFrontend?: boolean; normalizeApiBase?: boolean } = {}) {
+  const { mountFrontend = true, normalizeApiBase = false } = options;
   const app = express();
-  const PORT = Number(process.env.PORT) || 3000;
+
+  if (normalizeApiBase) {
+    app.use((req, _res, next) => {
+      if (!req.url.startsWith('/api/')) {
+        req.url = `/api${req.url.startsWith('/') ? req.url : `/${req.url}`}`;
+      }
+      next();
+    });
+  }
 
   app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ extended: true, limit: '10mb' }));
@@ -703,28 +712,39 @@ async function startServer() {
     return res.json(analytics);
   });
 
-  // In production or development: setup Vite or static file serving
-  if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.resolve(__dirname, 'dist')));
-    app.get('*', (req, res) => {
-      res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
-    });
-  } else {
-    // Mount Vite middlewares in development
-    const { createServer: createViteServer } = await import('vite');
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: 'spa',
-    });
-    app.use(vite.middlewares);
+  if (mountFrontend) {
+    // In production or development: setup Vite or static file serving
+    if (process.env.NODE_ENV === 'production') {
+      app.use(express.static(path.resolve(__dirname, 'dist')));
+      app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
+      });
+    } else {
+      // Mount Vite middlewares in development
+      const { createServer: createViteServer } = await import('vite');
+      const vite = await createViteServer({
+        server: { middlewareMode: true },
+        appType: 'spa',
+      });
+      app.use(vite.middlewares);
+    }
   }
+
+  return app;
+}
+
+async function startServer() {
+  const PORT = Number(process.env.PORT) || 3000;
+  const app = await createApp();
 
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`[Launch-Your-Store] Server running at http://0.0.0.0:${PORT}`);
   });
 }
 
-startServer().catch(err => {
-  console.error('[Launch-Your-Store] Fatal server start failure:', err);
-  process.exit(1);
-});
+if (!process.env.VERCEL) {
+  startServer().catch(err => {
+    console.error('[Launch-Your-Store] Fatal server start failure:', err);
+    process.exit(1);
+  });
+}

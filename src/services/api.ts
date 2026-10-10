@@ -35,9 +35,20 @@ async function fetchJson<T>(url: string, options: RequestInit = {}): Promise<T> 
   }
 
   const response = await fetch(url, { ...options, headers });
-  const data = await response.json();
+  const text = await response.text();
+  let data: any = null;
+  if (text) {
+    try {
+      data = JSON.parse(text);
+    } catch {
+      throw new Error(`Expected JSON from ${url}, but received: ${text.slice(0, 120)}`);
+    }
+  }
   if (!response.ok) {
-    throw new Error(data.error || data.message || `Request failed with status ${response.status}`);
+    throw new Error(data?.error || data?.message || `Request failed with status ${response.status}`);
+  }
+  if (data === null) {
+    throw new Error(`Request to ${url} returned an empty response.`);
   }
   return data as T;
 }

@@ -1,4 +1,5 @@
 import fs from 'fs';
+import os from 'os';
 import path from 'path';
 
 export interface User {
@@ -165,7 +166,7 @@ export interface DatabaseSchema {
   otpSessions: OtpSession[];
 }
 
-const DATA_DIR = path.resolve(process.cwd(), '.data');
+const DATA_DIR = process.env.DATA_DIR || (process.env.VERCEL ? path.join(os.tmpdir(), 'launch-your-store-data') : path.resolve(process.cwd(), '.data'));
 const DB_FILE = path.join(DATA_DIR, 'store_db.json');
 
 // Initial seed data with high-quality small business products
@@ -572,8 +573,8 @@ class DatabaseEngine {
       note: note || (newStatus === 'PROCESSING'
         ? `Order picked and packed. Estimated arrival: ${order.estimatedDeliveryDate}`
         : newStatus === 'SHIPPED'
-        ? `Order picked up and out for delivery. Estimated arrival: ${order.estimatedDeliveryDate}`
-        : `Status updated from ${prevStatus} to ${newStatus}.`),
+          ? `Order picked up and out for delivery. Estimated arrival: ${order.estimatedDeliveryDate}`
+          : `Status updated from ${prevStatus} to ${newStatus}.`),
     });
 
     if (newStatus === 'CANCELLED') {
