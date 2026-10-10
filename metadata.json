@@ -1,0 +1,8 @@
+{
+  "name": "Launch-Your-Store",
+  "description": "Professional no-code multi-tenant e-commerce website builder for small businesses with custom storefronts, role-based workflows, and real-time AI store analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
