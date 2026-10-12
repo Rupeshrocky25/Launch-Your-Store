@@ -31,7 +31,7 @@ export async function createApp(options: { mountFrontend?: boolean; normalizeApi
         const pathPart = cleanRoute.startsWith('api/') ? cleanRoute : `api/${cleanRoute}`;
         const remainingSearch = searchParams.toString();
         req.url = `/${pathPart}${remainingSearch ? `?${remainingSearch}` : ''}`;
-      } else if (!req.url.startsWith('/api')) {
+      } else if (normalizeApiBase && !req.url.startsWith('/api')) {
         req.url = `/api${req.url.startsWith('/') ? req.url : `/${req.url}`}`;
       }
     } catch (e) {
@@ -741,6 +741,21 @@ export async function createApp(options: { mountFrontend?: boolean; normalizeApi
         appType: 'spa',
       });
       app.use(vite.middlewares);
+
+      app.use('*', async (req, res, next) => {
+        if (req.originalUrl.startsWith('/api')) {
+          return next();
+        }
+        try {
+          const fs = await import('fs/promises');
+          const indexPath = path.resolve(__dirname, 'index.html');
+          let template = await fs.readFile(indexPath, 'utf-8');
+          template = await vite.transformIndexHtml(req.originalUrl, template);
+          res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
+        } catch (e) {
+          next(e);
+        }
+      });
     }
   }
 
