@@ -416,16 +416,16 @@ export const ShopkeeperDashboard: React.FC<DashboardProps> = ({
           </div>
         </div>
 
-        {/* Navigation Links */}
-        <nav className="p-3 space-y-1 flex-1 overflow-y-auto">
+        {/* Navigation Links - Horizontal scroll on mobile, vertical sidebar on desktop */}
+        <nav className="p-2 md:p-3 flex md:flex-col overflow-x-auto md:overflow-y-auto space-x-1.5 md:space-x-0 md:space-y-1 shrink-0 scrollbar-none">
           {[
-            { id: 'overview', label: 'Overview & Stats', icon: LayoutDashboard },
-            { id: 'products', label: 'Products & Stock', icon: Package, badge: products.length },
-            { id: 'orders', label: 'Orders & Tracking', icon: ShoppingBag, badge: orders.filter(o => o.status === 'PENDING').length },
-            { id: 'customization', label: 'Storefront Themes', icon: Palette },
-            { id: 'import', label: 'Bulk Import CSV', icon: FileSpreadsheet },
-            { id: 'ai', label: 'AI Business Analyst', icon: Bot, highlight: true },
-            { id: 'settings', label: 'Settings & Verification', icon: Settings },
+            { id: 'overview', label: 'Overview', fullLabel: 'Overview & Stats', icon: LayoutDashboard },
+            { id: 'products', label: 'Products', fullLabel: 'Products & Stock', icon: Package, badge: products.length },
+            { id: 'orders', label: 'Orders', fullLabel: 'Orders & Tracking', icon: ShoppingBag, badge: orders.filter(o => o.status === 'PENDING').length },
+            { id: 'customization', label: 'Themes', fullLabel: 'Storefront Themes', icon: Palette },
+            { id: 'import', label: 'Import CSV', fullLabel: 'Bulk Import CSV', icon: FileSpreadsheet },
+            { id: 'ai', label: 'AI Analyst', fullLabel: 'AI Business Analyst', icon: Bot, highlight: true },
+            { id: 'settings', label: 'Settings', fullLabel: 'Settings & Verification', icon: Settings },
           ].map(tab => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -434,19 +434,20 @@ export const ShopkeeperDashboard: React.FC<DashboardProps> = ({
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`w-full px-3 py-2.5 rounded-xl text-xs font-medium flex items-center justify-between transition-colors cursor-pointer ${
+                className={`shrink-0 md:w-full px-3 py-2 md:py-2.5 rounded-xl text-xs font-medium flex items-center justify-between gap-2 transition-colors cursor-pointer whitespace-nowrap ${
                   isActive
                     ? 'bg-white text-zinc-900 font-semibold shadow-xs'
                     : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'
                 } ${tab.highlight && !isActive ? 'text-emerald-400 font-semibold' : ''}`}
               >
-                <div className="flex items-center gap-2.5">
-                  <Icon className={`w-4 h-4 ${tab.highlight && !isActive ? 'text-emerald-400' : ''}`} />
-                  <span>{tab.label}</span>
+                <div className="flex items-center gap-2 md:gap-2.5">
+                  <Icon className={`w-4 h-4 shrink-0 ${tab.highlight && !isActive ? 'text-emerald-400' : ''}`} />
+                  <span className="hidden md:inline">{tab.fullLabel}</span>
+                  <span className="md:hidden">{tab.label}</span>
                 </div>
                 {tab.badge !== undefined && tab.badge > 0 && (
                   <span
-                    className={`px-1.5 py-0.5 rounded-md text-[10px] font-mono ${
+                    className={`px-1.5 py-0.5 rounded-md text-[10px] font-mono shrink-0 ${
                       isActive ? 'bg-zinc-200 text-zinc-900' : 'bg-zinc-800 text-zinc-300'
                     }`}
                   >
@@ -458,8 +459,8 @@ export const ShopkeeperDashboard: React.FC<DashboardProps> = ({
           })}
         </nav>
 
-        {/* Verification Status Banner in Sidebar */}
-        <div className="p-4 border-t border-zinc-800 text-xs">
+        {/* Verification Status Banner in Sidebar (Desktop) */}
+        <div className="hidden md:block p-4 border-t border-zinc-800 text-xs">
           <span className="text-[10px] text-zinc-400 uppercase tracking-wider block mb-1">
             Business Status
           </span>

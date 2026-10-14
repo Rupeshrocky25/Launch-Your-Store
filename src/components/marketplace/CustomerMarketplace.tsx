@@ -216,10 +216,10 @@ export const CustomerMarketplace: React.FC<MarketplaceProps> = ({ onSelectStore 
                                 )}
                               </div>
                               <div className="mt-1.5 flex flex-wrap items-center gap-2">
-                                <div className="flex items-center gap-1.5 text-[11px] font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                                <div className="flex items-center gap-1.5 text-[11px] font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 max-w-full">
                                   <Globe className="w-3 h-3 text-emerald-600 shrink-0" />
-                                  <span className="font-semibold text-zinc-500">Shop URL:</span>
-                                  <span>{typeof window !== 'undefined' ? `${window.location.origin}${window.location.pathname}#store-${st.slug}` : `http://localhost:3000/#store-${st.slug}`}</span>
+                                  <span className="font-semibold text-zinc-500 shrink-0">Shop:</span>
+                                  <span className="truncate max-w-[180px] sm:max-w-none">{typeof window !== 'undefined' ? `${window.location.origin}${window.location.pathname}#store-${st.slug}` : `http://localhost:3000/#store-${st.slug}`}</span>
                                 </div>
                                 {st.gmapsUrl && (
                                   <a

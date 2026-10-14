@@ -177,7 +177,7 @@ export const CheckoutModal: React.FC<{ onOrderComplete?: (order: Order) => void 
                 <h4 className="text-xs font-bold text-zinc-900 uppercase tracking-wider mb-2">
                   1. Shipping Information
                 </h4>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="block text-[11px] font-medium text-zinc-600 mb-1">Full Name</label>
                     <input
@@ -198,7 +198,7 @@ export const CheckoutModal: React.FC<{ onOrderComplete?: (order: Order) => void 
                       className="w-full px-3 py-2 rounded-lg border border-zinc-300 text-xs focus:ring-1 focus:ring-zinc-900 font-mono"
                     />
                   </div>
-                  <div className="col-span-2">
+                  <div className="sm:col-span-2">
                     <label className="block text-[11px] font-medium text-zinc-600 mb-1">Street Address</label>
                     <input
                       type="text"
@@ -236,9 +236,9 @@ export const CheckoutModal: React.FC<{ onOrderComplete?: (order: Order) => void 
                 <h4 className="text-xs font-bold text-zinc-900 uppercase tracking-wider mb-2 pt-2 border-t border-zinc-100">
                   2. Payment Method
                 </h4>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
                   <label
-                    className={`p-3 rounded-xl border text-xs cursor-pointer flex flex-col justify-between transition-all ${
+                    className={`p-2 sm:p-3 rounded-xl border text-[11px] sm:text-xs cursor-pointer flex flex-col justify-between transition-all ${
                       paymentMethod === 'DEMO_UPI'
                         ? 'border-zinc-900 bg-zinc-50 font-semibold ring-1 ring-zinc-900'
                         : 'border-zinc-200 hover:border-zinc-300'
@@ -252,11 +252,11 @@ export const CheckoutModal: React.FC<{ onOrderComplete?: (order: Order) => void 
                       className="sr-only"
                     />
                     <span>Demo UPI</span>
-                    <span className="text-[10px] text-zinc-500 font-normal">GPay / PhonePe</span>
+                    <span className="text-[9px] sm:text-[10px] text-zinc-500 font-normal">GPay/UPI</span>
                   </label>
 
                   <label
-                    className={`p-3 rounded-xl border text-xs cursor-pointer flex flex-col justify-between transition-all ${
+                    className={`p-2 sm:p-3 rounded-xl border text-[11px] sm:text-xs cursor-pointer flex flex-col justify-between transition-all ${
                       paymentMethod === 'COD'
                         ? 'border-zinc-900 bg-zinc-50 font-semibold ring-1 ring-zinc-900'
                         : 'border-zinc-200 hover:border-zinc-300'
@@ -269,12 +269,12 @@ export const CheckoutModal: React.FC<{ onOrderComplete?: (order: Order) => void 
                       onChange={() => setPaymentMethod('COD')}
                       className="sr-only"
                     />
-                    <span>Cash on Delivery</span>
-                    <span className="text-[10px] text-zinc-500 font-normal">Pay at door</span>
+                    <span>Cash/COD</span>
+                    <span className="text-[9px] sm:text-[10px] text-zinc-500 font-normal">Pay at door</span>
                   </label>
 
                   <label
-                    className={`p-3 rounded-xl border text-xs cursor-pointer flex flex-col justify-between transition-all ${
+                    className={`p-2 sm:p-3 rounded-xl border text-[11px] sm:text-xs cursor-pointer flex flex-col justify-between transition-all ${
                       paymentMethod === 'DEMO_CARD'
                         ? 'border-zinc-900 bg-zinc-50 font-semibold ring-1 ring-zinc-900'
                         : 'border-zinc-200 hover:border-zinc-300'

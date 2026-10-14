@@ -157,8 +157,8 @@ export const CustomerOrders: React.FC = () => {
 
                 {/* Tracking Progress Stepper */}
                 {!isCancelled ? (
-                  <div className="px-6 py-5 bg-white border-b border-zinc-100">
-                    <div className="grid grid-cols-4 gap-2 relative">
+                  <div className="px-3 sm:px-6 py-4 sm:py-5 bg-white border-b border-zinc-100">
+                    <div className="grid grid-cols-4 gap-1 sm:gap-2 relative">
                       {STATUS_STEPS.map((step, idx) => {
                         const isDone = idx <= currentStepIdx;
                         const isCurrent = idx === currentStepIdx;
@@ -166,16 +166,16 @@ export const CustomerOrders: React.FC = () => {
                         return (
                           <div key={step.key} className="flex flex-col items-center text-center">
                             <div
-                              className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
+                              className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold transition-all ${
                                 isDone
                                   ? 'bg-emerald-600 text-white shadow-xs'
                                   : 'bg-zinc-100 text-zinc-400'
-                              } ${isCurrent ? 'ring-4 ring-emerald-100' : ''}`}
+                              } ${isCurrent ? 'ring-2 sm:ring-4 ring-emerald-100' : ''}`}
                             >
-                              {isDone ? <CheckCircle2 className="w-4 h-4" /> : idx + 1}
+                              {isDone ? <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : idx + 1}
                             </div>
                             <span
-                              className={`text-[11px] font-medium mt-1.5 ${
+                              className={`text-[9px] sm:text-[11px] font-medium mt-1 leading-tight ${
                                 isDone ? 'text-zinc-900 font-semibold' : 'text-zinc-400'
                               }`}
                             >
